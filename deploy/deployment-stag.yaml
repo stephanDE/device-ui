@@ -1,0 +1,59 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: device-ui-service
+  namespace: stag
+spec:
+  selector:
+    app: device-ui-service
+  ports:
+    - port: 80
+      targetPort: 80
+      name: device-ui-service
+      protocol: TCP
+  type: ClusterIP
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: device-ui-service
+  namespace: stag
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: device-ui-service
+  template:
+    metadata:
+      labels:
+        app: device-ui-service
+    spec:
+      imagePullSecrets:
+        - name: pipeline-docker-registry
+      containers:
+        - name: device-ui-service
+          image: ${CICD_IMAGE}:${CICD_EXECUTION_SEQUENCE}
+          env:
+            - name: ENV
+              value: testing
+          envFrom:
+            - secretRef:
+                name: device-ui-stag
+                optional: false
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: device-ui
+  namespace: stag
+spec:
+  rules:
+    - host: device-ui.testing.116.203.237.159.xip.io
+      http:
+        paths:
+          - backend:
+              serviceName: device-ui-service
+              servicePort: 80
+  tls:
+    - hosts:
+        - device-ui.testing.116.203.237.159.xip.io

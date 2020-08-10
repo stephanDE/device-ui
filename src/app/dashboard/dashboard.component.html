@@ -1,0 +1,68 @@
+<div class="section">
+    <div class="columns">
+        <div class="column">
+            <div class="dropdown" [class.is-active]="facilityDrpdIsOpen">
+                <div class="dropdown-trigger" (click)="toggleFacilityDrpd()">
+                    <button class="button" aria-haspopup="true"
+                        aria-controls="dropdown-menu">
+                        <span *ngIf="!selectedFacility">Gebäude</span>
+                        <span *ngIf="selectedFacility">{{selectedFacility.address}}</span>
+                        <span class="icon is-small">
+                            <i class="fas fa-angle-down" aria-hidden="true"></i>
+                        </span>
+                    </button>
+                </div>
+                <div class="dropdown-menu" id="dropdown-menu" role="menu">
+                    <div class="dropdown-content">
+                        <a *ngFor="let item of facilites" class="dropdown-item"
+                            (click)="selectFacility(item)">
+                            {{ item.address }}
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <div *ngIf="selectedFacility" class="item-container">
+                    <div *ngFor="let floor of selectedFacility.floors">
+                        <p class="has-text-weight-bold">{{ floor.floorName }}</p>
+                        <div *ngFor="let flat of floor.flats">
+                            <div
+                                [class.has-background-primary]="selectedFlat?.flatId
+                                === flat.flatId" class="box item has-click
+                                has-text-centered"
+                                (click)="selectFlat(flat)">
+                                <div class="is-size-7 has-text-grey-lighter">
+                                    {{
+                                    flat.flatId }}</div>
+                                <div>{{ flat.flatName }}</div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="column">
+            <div class="box" *ngFor="let room of rooms">
+                <p> Raum: <span class="has-text-weight-bold">{{room.roomName }}</span> <p>
+                        <!--<pre>{{ room | json }}</pre>-->
+                        <button [class.is-loading]="dataLoading" (click)="openData(room)" class="button">Zeige Daten</button>
+                        
+                        <div class="mt-4" *ngIf="openedId == room.roomId && !dataLoading">
+                            <div class="is-size-7 has-text-grey-lighter">
+                                {{ fraunhoferData.deviceId }}</div>
+                            <div class="mt-2">Gerätename: <span class="has-text-weight-bold">{{fraunhoferData.fraunhoferFlatId}}_{{fraunhoferData.fraunhoferRoomNr}}</span></div>
+
+                            <div class="mt-2">Temperatur: <span class="has-text-weight-bold">{{ fraunhoferData.temperature.value | number }} Celsius</span></div>
+                            <div>Letztes Update: <span class="has-text-weight-bold">{{ getTime(fraunhoferData.temperature.timestamp) }}</span></div>
+
+                            <hr>
+
+                            <div>Verbrauch: <span class="has-text-weight-bold">{{ fraunhoferData.meterValue.value }}</span></div>
+                            <div>Letztes Update: <span class="has-text-weight-bold">{{ getTime(fraunhoferData.meterValue.timestamp) }}</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
