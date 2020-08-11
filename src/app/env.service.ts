@@ -40,10 +40,10 @@ export class EnvService {
       this._apiUrl = 'https://device-api.dev.78.47.57.179.xip.io/api';
     } else if (/^device-ui.testing/.test(hostname)) {
       this._env = Environment.Staging;
-      this._apiUrl = 'https://device-api.testing.78.47.57.179.xip.io/api';
+      this._apiUrl = 'https://device-api.testing.116.203.237.159.xip.io/api';
     } else if (/^device-ui/.test(hostname)) {
       this._env = Environment.Prod;
-      this._apiUrl = 'https://device-api.78.47.57.179.xip.io/api';
+      this._apiUrl = 'https://device-api.116.203.237.159.xip.io/api';
     } else {
       console.warn(`Cannot find environment for host name ${hostname}`);
     }
