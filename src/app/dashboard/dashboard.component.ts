@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { DashboardService } from './dashboard.service';
 
-import { find, flatMap, filter} from 'lodash';
+import { find, flatMap, filter, last} from 'lodash';
 
 import * as moment from 'moment';
 
@@ -128,5 +128,9 @@ export class DashboardComponent {
 
   getTime(value) {
     return moment(value).fromNow();
+  }
+
+  getLast(v) {
+    return v[0];
   }
 }
